@@ -38,7 +38,7 @@
     <div class="container">
         <div class="row">
             <div class="div col-sm-12">
-                <h2>Créer une BDD, créer un table <code> CREATE DATABASE basetest CHARACTERE SET 'utf8';</code></h2>
+                <h2>Créer une BDD, créer un table <code> CREATE DATABASE basetest CHARACTER SET 'utf8';</code></h2>
             </div> <!-- fin col  -->
         </div> <!-- fin row  -->
        <div class="row">
@@ -378,9 +378,9 @@
                         <li>Afficher le salaire moyen par service : <code>SELECT service, AVG(salaire) AS 'cout_moyen' FROM employes GROUP BY service;</code></li>
                         <li>Afficher le nombre de recrutements sur l'année 2010 : <code>SELECT COUNT(*) AS 'nbr de recrutement 2010' FROM employes WHERE date_embauche BETWEEN '2010-01-01' AND '2010-12-31';</code></li>
                         <li>Augmenter le salaire pour chaque employé de 100 € :<code> UPDATE employes SET salaire = salaire + 100;</code></li>
-                        <li>Afficher le nombre de services (différents) : <code></code></li>
-                        <li>Afficher les informations de l'employé du service commercial gagnant le salaire le plus élevé : <code></code></li>
-                        <li>Afficher l'employé ayant été embauché en dernier : <code></code></li>
+                        <li>Afficher le nombre de services (différents) : <code>SELECT COUNT(DISTINCT service) AS nbr_service FROM employes;</code></li>
+                        <li>Afficher les informations de l'employé du service commercial gagnantle salaire le plus élevé : <code>SELECT * FROM employes WHERE salaire = (SELECT MAX(salaire) FROM employes WHERE service ='commercial');</code></li>
+                        <li>Afficher l'employé ayant été embauché en dernier : <code> SELECT * FROM employes ORDER BY date_embauche;</code>pour savoir qui à été embauché en dernier <code> SELECT * FROM employes WHERE date_embauche = (SELECT MAX(date_embauche) FROM employes;</code></li>
                     </ol>
                 </div>
             </div><!-- fin row  -->

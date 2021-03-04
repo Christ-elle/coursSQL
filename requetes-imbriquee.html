@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>SQL COURS Requêtes imbriquées</title>
+  </head>
+  <body>
+      <div container-fluid>
+        <!-- ========================================= -->
+		<!-- navigation -->
+		<!-- ========================================= -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="#">cours SQL</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
+						<a class="nav-link" href="#">Menu 1</a>
+						<a class="nav-link" href="#">Menu 2</a>
+						<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Menu 3 - Disabled</a>
+					</div>
+				</div>
+            </nav>
+        </div>
+        
+    <!-- fin container-->
+    <!-- ========================================= -->
+			<!-- Contenu principal -->
+	<!-- ========================================= -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Création de la BDD bibliothèque</h2>
+                <p>En SQL <code> CREATE DATABASE bibliotheque CHARACTER SET 'utf8';</code></p>
+                <p>Quels sont les sujets ?</p>
+                <ul>
+                    <li>Des livres</li>
+                    <li>Des abonnés</li>
+                    <li>Des emprunts</li>
+                </ul>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <p>Création de la table abonnés <code>CREATE TABLE IF NOT EXISTS abonne ( id_abonne INT(3) NOT NULL AUTO_INCREMENT, prenom VARCHAR(20) NOT NULL, PRIMARY KEY (id_abonne) ) ENGINE=innoDB;
+                </code></p>
+                <p> Création de la table livre :
+                    <code>CREATE TABLE IF NOT EXISTS livre ( id_livre INT(3) NOT NULL AUTO_INCREMENT, auteur VARCHAR(30) NOT NULL, titre VARCHAR(30) NOT NULL, PRIMARY KEY (id_livre) ) ENGINE=innoDB;</code>
+                </p>
+                <p>Création de la table emprunt : <code> CREATE TABLE IF NOT EXISTS emprunt ( id_emprunt INT(3) NOT NULL AUTO_INCREMENT, id_livre INT(3) DEFAULT NULL, id_abonne INT (3) DEFAULT NULL, date_sortie DATE NOT NULL, date_rendu DATE DEFAULT NULL, PRIMARY KEY (id_emprunt) ) ENGINE=innoDB;</code></p>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <p>Création des clefs étrangères ajouter 2 clefs étrangères à la table des empruntsen disant de quelle table, et de quelle base elles proviennent : <code> ALTER TABLE emprunt ADD FOREIGN KEY (id_livre) REFERENCES bibliotheque.livre (id_livre); ALTER TABLE emprunt ADD FOREIGN KEY (id_abonne) REFERENCES bibliotheque.abonne (id_abonne);</code></p>
+            </div>
+        </div><!-- fin row  -->
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <p>Insértion des abonnés :
+                        <code>INSERT INTO abonne (id_abonne, prenom) VALUES<br>
+                            (1, 'Guillaume'),<br>
+                            (2, 'Benoit'),<br>
+                            (3, 'Chloe'),<br>
+                            (4, 'Laura');<br></code></p>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <p>Insértion des livres :
+                        <code>INSERT INTO livre (id_livre, auteur, titre) VALUES
+                            (100, 'GUY DE MAUPASSANT', 'Une vie'),
+                            (101, 'GUY DE MAUPASSANT', 'Bel-Ami '),
+                            (102, 'HONORE DE BALZAC', 'Le père Goriot'),
+                            (103, 'ALPHONSE DAUDET', 'Le Petit chose'),
+                            (104, 'ALEXANDRE DUMAS', 'La Reine Margot'),
+                            (105, 'ALEXANDRE DUMAS', 'Les Trois Mousquetaires');</code></p>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <p>Insértion des emprunts :
+                        <code>INSERT INTO emprunt (id_emprunt, id_livre, id_abonne, date_sortie, date_rendu) VALUES
+                            (1, 100, 1, '2014-12-17', '2014-12-18'),
+                            (2, 101, 2, '2014-12-18', '2014-12-20'),
+                            (3, 100, 3, '2014-12-19', '2014-12-22'),
+                            (4, 103, 4, '2014-12-19', '2014-12-22'),
+                            (5, 104, 1, '2014-12-19', '2014-12-28'),
+                            (6, 105, 2, '2015-03-20', '2015-03-26'),
+                            (7, 105, 3, '2015-06-13', NULL),
+                            (8, 100, 2, '2015-06-15', NULL);</code></p>
+            </div>
+        </div><!-- fin row  -->
+        <hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2> SELECT sur plusieurs tables</h2>
+            </div>
+            <div class="col-sm-12">
+                <ul>
+                    <li><code>SELECT * FROM abonne ;</code></li>
+                    <li><code>SELECT * FROM livre ;</code></li>
+                    <li><code>SELECT * FROM emprunt;</code></li>
+                    <li>...</li>
+                    <li>On cherche les livres non encore rendu et on utilise IS pour chercher ce qui est NULL, la valeur NULL se test avec IS :<code> SELECT id_livre FROM emprunt WHERE date_rendu IS NULL;</code></li>
+                    <li>On utilise le mot clef IN et non pas le signe égal(=) car plusieurs résultats seront renvoyés par la requête.Le champ id_livre est utilisé pour faire "joindre" les informations de la table emprunt<code>SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL);</code></li>
+                    <li>...</li>
+                    <li>L'id des livres que Chloé à emprunté à la bibliothèque<code>SELECT id_livre FROM emprunt WHERE id_abonne = 3;</code></li>
+                    <li>Le prénom des abonnés ayant emprunté un livre le 19-12-2014 :<code> SELECT prenom FROM abonne WHERE id_abonne IN (SELECT id_abonne FROM emprunt WHERE date_sortie = '2014-12-19');</code></li>
+                    <li>....</li>
+                    <li>Afficher la liste des abonnés ayant emprunté un livre de Daudet <code>SELECT prenom FROM abonne WHERE id_abonne IN (SELECT id_abonne FROM emprunt WHERE id_livre IN (SELECT id_livre FROM livre WHERE auteur= 'ALPHONSE Daudet'));</code></li>
+                    <li>Afficher les titres des livres que Chloé à emprunté à la bibliothèque <code></code></li>
+                    <li>...</li>
+                    <li>Afficher les titres des livres que Chloé n'as pas emprunté <code>SELECT titre FROM livre WHERE id_livre NOT IN (SELECT id_livre FROM emprunt WHERE id_abonne = (SELECT id_abonne FROM abonne WHERE prenom = 'Chloé'));</code></li>
+                    <li>Afficher les titres des livres que Chloé ,'as pas encore rendu à la bibliothèque<code>(SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL AND id_abonne = (SELECT id_abonne FROM abonne WHERE prenom = 'Chloé'));</code></li>
+                    <li>Combien de livres Guillaume à emprunté à la bibliothèque <code>SELECT COUNT(id_livre) FROM emprunt WHERE id_abonne IN(SELECT id_abonne FROM abonne WHERE prenom='Guillaume');</code> OU <code>SELECT COUNT(*) AS 'nombre de livres' FROM emprunt WHERE id_abonne IN(SELECT id_abonne FROM abonne WHERE prenom='Guillaume');</code></li>
+                </ul>
+            </div>
+        </div><!-- fin row  -->
+        
+        
+        
+    </div> <!-- fin container  -->
+   
+    .
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
